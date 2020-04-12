@@ -1,0 +1,46 @@
+* {
+  box-sizing: border-box;
+}
+
+.main-header {
+  background-color: #36495c;
+  padding: 1rem;
+  color: white;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.main-brand {
+  width: 100%;
+  text-align: center;
+}
+
+.main-nav {
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.main-nav a {
+  margin: 3rem;
+}
+
+.dropdown {
+  display: inline-block;
+}
+
+.main-cta {
+  font-size: 1.2rem;
+  padding: 10px 16px;
+  background-color: #626ee3;
+}
+
+/* .main-canvas {
+  width: 95%;
+  margin: auto;
+} */
+
+#myCanvas {
+  /* background-color: rgb(224, 224, 224); */
+}
