@@ -36,6 +36,12 @@
   background-color: #626ee3;
 }
 
+.main-cta:hover,
+.main-cta:focus {
+  outline: none;
+  cursor: pointer;
+}
+
 /* .main-canvas {
   width: 95%;
   margin: auto;
