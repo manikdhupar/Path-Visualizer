@@ -39,7 +39,7 @@ let pathArr;
 document.querySelector(".main-cta").addEventListener("click", () => {
   let start = { x: startNodeCordinates.x / 25, y: startNodeCordinates.y / 25 };
   let end = { x: endNodeCordinates.x / 25, y: endNodeCordinates.y / 25 };
-  pathArr = getPathDfs(start, end);
+  pathArr = getPathBfs(start, end);
   ei = pathArr.length - 1;
   pathArr.reverse();
   update();
@@ -249,10 +249,129 @@ function getPathDfs(start, end) {
   return path;
 }
 
+function getPathBfs(start, end) {
+  console.log("called");
+  let grid = [];
+  for (let i = 0; i < numberOfRows; i++) {
+    let innerArr = [];
+    for (let j = 0; j < numberOfCol; j++) {
+      innerArr.push(false);
+    }
+    grid.push(innerArr);
+  }
+
+  let path = [];
+
+  let sourceToDestMapping = {};
+
+  function bfs(start, end) {
+    //acts as a queue
+    let pendingNodes = [];
+
+    pendingNodes.push(start);
+    while (pendingNodes.length > 0) {
+      let currentNode = pendingNodes[0];
+      if (
+        grid[currentNode.x][currentNode.y] ||
+        visited[currentNode.x][currentNode.y]
+      ) {
+        console.log(currentNode);
+        pendingNodes.shift();
+        continue;
+      }
+      let parentNodeStr = JSON.stringify(currentNode);
+      if (currentNode.x === end.x && currentNode.y === end.y) {
+        return;
+      }
+      pendingNodes.shift();
+      if (currentNode.y > 0) {
+        let newStart = {
+          x: currentNode.x,
+          y: currentNode.y - 1,
+        };
+        let nodeStr = JSON.stringify(newStart);
+        if (!grid[newStart.x][newStart.y]) {
+          sourceToDestMapping[nodeStr] = parentNodeStr;
+          pendingNodes.push(newStart);
+        }
+      }
+
+      if (currentNode.x < numberOfRows - 1) {
+        let newStart = {
+          x: currentNode.x + 1,
+          y: currentNode.y,
+        };
+        let nodeStr = JSON.stringify(newStart);
+        if (!grid[newStart.x][newStart.y]) {
+          sourceToDestMapping[nodeStr] = parentNodeStr;
+          pendingNodes.push(newStart);
+        }
+      }
+
+      if (currentNode.y < numberOfCol - 1) {
+        let newStart = {
+          x: currentNode.x,
+          y: currentNode.y + 1,
+        };
+        let nodeStr = JSON.stringify(newStart);
+        if (!grid[newStart.x][newStart.y]) {
+          sourceToDestMapping[nodeStr] = parentNodeStr;
+          pendingNodes.push(newStart);
+        }
+      }
+
+      if (currentNode.x > 0) {
+        let newStart = {
+          x: currentNode.x - 1,
+          y: currentNode.y,
+        };
+        let nodeStr = JSON.stringify(newStart);
+        if (!grid[newStart.x][newStart.y]) {
+          sourceToDestMapping[nodeStr] = parentNodeStr;
+          pendingNodes.push(newStart);
+        }
+      }
+      grid[currentNode.x][currentNode.y] = true;
+    }
+  }
+
+  bfs(start, end);
+  let currNodeString = JSON.stringify(end);
+  let sourceNodeString = JSON.stringify(start);
+  console.log(sourceToDestMapping);
+  while (true) {
+    path.push(JSON.parse(currNodeString));
+    if (currNodeString == sourceNodeString) break;
+    currNodeString = sourceToDestMapping[currNodeString];
+  }
+
+  return path;
+}
+
 function drawPath(x, y) {
   ctx.fillStyle = "blue";
-  console.log(x, y, 25, 25);
+  ctx.globalAlpha = 0.4;
   ctx.fillRect(x, y, 25, 25);
+  setTimeout(() => {
+    console.log("here");
+    ctx.globalAlpha = 0.4;
+    ctx.fillRect(x, y, 25, 25);
+  }, 200);
+  setTimeout(() => {
+    console.log("here");
+    ctx.globalAlpha = 0.5;
+    ctx.fillRect(x, y, 25, 25);
+  }, 350);
+  setTimeout(() => {
+    console.log("here");
+    ctx.globalAlpha = 0.8;
+    ctx.fillRect(x, y, 25, 25);
+  }, 500);
+  setTimeout(() => {
+    console.log("here");
+    ctx.globalAlpha = 1;
+    ctx.fillRect(x, y, 25, 25);
+  }, 650);
   // calculate incremental points along the path
 }
 
